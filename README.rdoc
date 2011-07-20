@@ -1,0 +1,59 @@
+= Mongoid.to_csv
+
+== Description
+
+A simple Mongoid::Base to_csv() class method that preserves scopes.
+to_csv() returns the entire contents including the header ready to be written to file.
+
+== Usage
+
+  # Assuming a Movie model with title and director_id columns.
+  Movie.to_csv
+  # would return:
+  title,director_id
+  title,director_id
+  Black Swan,0
+  Inception,1
+  The Fighter,2
+  The King's Speech,3
+  The Kids Are All Right,4
+
+  Movie.bad.to_csv
+  # would return:
+  title,director_id
+  The Kids Are All Right,4
+
+Note that #to_csv is called like a scope or query. The following will NOT give you the same results:
+
+  Movie.all.to_csv
+
+This will use Ruby's Array#to_csv method.
+
+=== Attribute#to_csv
+
+After a model object's attributes are collected, to_csv is called on the resulting array. However, this poses a problem because it will blindly convert the attributes to a string -- i.e. call to_s on them. If one of your attributes is a Date, then calling to_s may produce unwanted output. For example, if you have Date::DATE_FORMATS[:default] = '%d %B, %Y' your dates will have the month written out like 'January', 'February', etc. To counter this, this gem will make an attempt to call to_csv() on each attribute. To get YYYY-MM-DD output, you could do something like:
+
+  class Date
+    def to_csv
+      strftime('%Y-%m-%d')
+    end
+  end
+
+Note that object.send(attribute_name) is used, so datetime fields will be returned as ActiveSupport::TimeWithZone objects.
+
+== TODO
+
+* Options to specify columns to be included (currently, id and timestamp columns are excluded).
+* Combine with active_record_to_csv somehow since they are essentially doing the same thing.
+
+== Compatibility
+
+Tested with Mongoid v2.0.2
+
+http://gem-testers.org/gems/mongoid_to_csv
+
+== Related gems
+
+* https://github.com/ordinaryzelig/mongoid_csv
+* https://github.com/ordinaryzelig/orm_from_csv
+* https://github.com/ordinaryzelig/active_record_to_csv
