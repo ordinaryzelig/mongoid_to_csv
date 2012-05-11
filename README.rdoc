@@ -48,7 +48,9 @@ Note that object.send(attribute_name) is used, so datetime fields will be return
 
 == Compatibility
 
-Tested with Ruby 1.9.2-p290 and Mongoid v2.0.2
+Tested with Ruby 1.9.2-p318 and Mongoid v2.0.2
+
+If you are using a lower version of Ruby 1.9.2-p318 (the p318 is important), you need to install and require the `faster_csv` gem. This was tested with faster_csv v1.5.4.
 
 == Related gems
 
