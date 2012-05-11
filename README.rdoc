@@ -23,11 +23,11 @@ to_csv() returns the entire contents including the header ready to be written to
   title,director_id
   The Kids Are All Right,4
 
-Note that #to_csv is called like a scope or query. The following will NOT give you the same results:
+For normal arrays, `to_csv` works the same way.
 
   Movie.all.to_csv
-
-This will use Ruby's Array#to_csv method.
+  # Same as
+  Movie.to_csv
 
 === Attribute#to_csv
 
@@ -48,9 +48,7 @@ Note that object.send(attribute_name) is used, so datetime fields will be return
 
 == Compatibility
 
-Tested with Mongoid v2.0.2
-
-http://gem-testers.org/gems/mongoid_to_csv
+Tested with Ruby 1.9.2-p290 and Mongoid v2.0.2
 
 == Related gems
 

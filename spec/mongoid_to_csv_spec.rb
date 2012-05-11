@@ -37,4 +37,8 @@ describe MongoidToCSV do
     csv_string.should_not include(date.to_s)
   end
 
+  it 'works on an array' do
+    Movie.all.to_csv.should == Movie.to_csv
+  end
+
 end

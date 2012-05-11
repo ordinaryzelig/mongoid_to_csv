@@ -2,12 +2,20 @@ require 'mongoid'
 require 'csv'
 
 module MongoidToCSV
+
   # Return full CSV content with headers as string.
   # Defined as class method which will have chained scopes applied.
   def to_csv
+    documents_to_csv(all, fields)
+  end
+
+  module_function
+
+  def documents_to_csv(documents, fields = documents.first.class.fields)
+    doc_class = documents.first.class
     csv_columns = fields.keys - %w{_id created_at updated_at _type}
     header_row = csv_columns.to_csv
-    records_rows = all.map do |record|
+    records_rows = documents.map do |record|
       csv_columns.map do |column|
         value = record.send(column)
         value = value.to_csv if value.respond_to?(:to_csv)
@@ -16,6 +24,7 @@ module MongoidToCSV
     end.join
     header_row + records_rows
   end
+
 end
 
 module Mongoid::Document
@@ -33,3 +42,14 @@ class Mongoid::Relation
     end
   end
 end
+
+module ArrayToCSV
+  def to_csv
+    if first.is_a?(Mongoid::Document)
+      MongoidToCSV.documents_to_csv(self)
+    else
+      super
+    end
+  end
+end
+Array.send :include, ArrayToCSV
