@@ -23,11 +23,29 @@ to_csv() returns the entire contents including the header ready to be written to
   title,director_id
   The Kids Are All Right,4
 
-For normal arrays, `to_csv` works the same way.
+For normal arrays, `to_mongoid_csv` works the same way.
 
-  Movie.all.to_csv
+  Movie.all.to_mongoid_csv
   # Same as
   Movie.to_csv
+
+=== Why not Array.to_csv?
+
+I tried.
+
+  require 'csv'
+  module ArrayToCSV
+    def to_csv
+      if first.is_a?(Mongoid::Document)
+        MongoidToCSV.documents_to_csv(self)
+      else
+        super
+      end
+    end
+  end
+  Array.send :include, ArrayToCSV
+
+Something is giving ruby's internal `Array#to_csv` precedence and ignoring mine. Got tired of messing around with it.
 
 === Attribute#to_csv
 

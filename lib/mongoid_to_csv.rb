@@ -43,13 +43,8 @@ class Mongoid::Relation
   end
 end
 
-module ArrayToCSV
-  def to_csv
-    if first.is_a?(Mongoid::Document)
-      MongoidToCSV.documents_to_csv(self)
-    else
-      super
-    end
+class Array
+  def to_mongoid_csv
+    MongoidToCSV.documents_to_csv(self)
   end
 end
-Array.send :include, ArrayToCSV
