@@ -44,7 +44,8 @@ class Mongoid::Relation
 end
 
 class Array
-  def to_mongoid_csv
+  def mongoid_to_csv
+    return self if empty?
     MongoidToCSV.documents_to_csv(self)
   end
 end

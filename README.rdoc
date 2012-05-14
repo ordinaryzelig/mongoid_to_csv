@@ -25,7 +25,7 @@ to_csv() returns the entire contents including the header ready to be written to
 
 For normal arrays, `to_mongoid_csv` works the same way.
 
-  Movie.all.to_mongoid_csv
+  Movie.all.mongoid_to_csv
   # Same as
   Movie.to_csv
 
